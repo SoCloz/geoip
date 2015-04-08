@@ -122,6 +122,13 @@ func OpenType(dbType int) (*GeoIP, error) {
 	return g, nil
 }
 
+// GetVersion returns the database version.
+func (gi *GeoIP) GetVersion() string {
+	version := C.GeoIP_database_info(gi.db)
+	defer C.free(unsafe.Pointer(version))
+	return C.GoString(version)
+}
+
 // Takes an IPv4 address string and returns the organization name for that IP.
 // Requires the GeoIP organization database.
 func (gi *GeoIP) GetOrg(ip string) string {
